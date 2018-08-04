@@ -1,0 +1,30 @@
+version: "2"
+services:
+  fesapp-expo:
+    build: .
+    command: exp start --tunnel -s tohu.soy@gmail.com
+    restart: always
+    working_dir: /work
+    volumes:
+      - ./client:/work
+      - /work/node_modules
+  git:
+    image: node
+    command: bash -c 'npm i && node server.js'
+    environment:
+      VIRTUAL_HOST: fesapp-expo.to-hutohu.com
+      LETSENCRYPT_HOST: fesapp-expo.to-hutohu.com
+      LETSENCRYPT_EMAIL: tohu.soy@gmail.com
+    restart: always
+    working_dir: /work
+    volumes:
+      - .:/work
+    ports:
+      - 8080
+    networks:
+      - docker-nginx_default
+networks:
+  docker-nginx_default:
+    external: true
+
+
